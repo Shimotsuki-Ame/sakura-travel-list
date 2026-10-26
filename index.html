@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 行李打包清單 ｜ 旅行の準備</title>
+    <style>
+        :root {
+            --anime-blue: #e0f2fe;
+            --anime-pink: #fce7f3;
+            --accent-sakura: #ffb7c5;
+            --accent-sky: #38bdf8;
+            --text-dark: #374151;
+            --text-muted: #9ca3af;
+            --card-bg: rgba(255, 255, 255, 0.88);
+        }
+
+        body {
+            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, var(--anime-blue) 0%, var(--anime-pink) 100%);
+            background-attachment: fixed;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 簡約日本動漫元素背景裝飾 (富士山與太陽意象剪影) */
+        body::before {
+            content: "";
+            position: fixed;
+            bottom: 0;
+            right: 10%;
+            width: 300px;
+            height: 150px;
+            background: radial-gradient(circle at 50% 150%, rgba(255, 183, 197, 0.4) 0%, transparent 70%),
+                        linear-gradient(to top, rgba(255,255,255,0.3) 0%, transparent 100%);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            z-index: -1;
+        }
+
+        body::after {
+            content: "🌸";
+            position: fixed;
+            top: 10%;
+            left: 5%;
+            font-size: 2rem;
+            opacity: 0.2;
+            animation: float 6s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(15deg); }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            position: relative;
+        }
+
+        /* 頂部排版 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .title-area h1 {
+            margin: 0 0 5px 0;
+            font-size: 2.2rem;
+            color: #4b5563;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        .title-area span {
+            font-size: 0.9rem;
+            color: #8b5cf6;
+            letter-spacing: 1px;
+        }
+
+        /* 倒數計時區塊 - 調整為深灰出發日與櫻花粉倒數 */
+        .countdown-box {
+            background: var(--card-bg);
+            padding: 14px 22px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border: 1px solid rgba(255,255,255,0.6);
+            text-align: right;
+        }
+        .date-input-wrapper {
+            font-size: 1.1rem;
+            color: #4b5563;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+        .date-input-wrapper input {
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 1.1rem;
+            color: #4b5563;
+            font-weight: bold;
+            cursor: pointer;
+            width: 130px;
+            text-align: center;
+            border-bottom: 2px dashed var(--accent-sakura);
+        }
+        .date-input-wrapper input:focus { outline: none; }
+        .countdown-text {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #ff9eaf;
+            letter-spacing: 0.5px;
+        }
+
+        /* 進度條設計 */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 4px;
+            margin-bottom: 35px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .progress-bar {
+            height: 16px;
+            background: linear-gradient(90deg, var(--accent-sakura) 0%, var(--accent-sky) 100%);
+            border-radius: 20px;
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .progress-text {
+            position: absolute;
+            right: 15px;
+            top: -25px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #6b7280;
+        }
+
+        /* 主清單卡片群組 */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 10px 25px rgba(142, 197, 252, 0.15);
+            border: 1px solid rgba(255,255,255,0.7);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+        .category-card:hover { transform: translateY(-2px); }
+
+        .category-title {
+            font-size: 1.15rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #4b5563;
+            border-bottom: 2px dashed var(--accent-sakura);
+            padding-bottom: 6px;
+        }
+
+        /* 可編輯標題的輸入框樣式 */
+        .category-title-input {
+            border: none;
+            background: transparent;
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #4b5563;
+            width: 100%;
+            font-family: inherit;
+            border-radius: 4px;
+            padding: 2px 4px;
+            transition: background 0.2s;
+        }
+        .category-title-input:hover { background: rgba(0, 0, 0, 0.03); }
+        .category-title-input:focus {
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 2px var(--accent-sakura);
+        }
+
+        /* 清單列表排版 */
+        .item-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 4px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .item-row:hover { background-color: rgba(255,255,255,0.5); }
+
+        .item-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            flex-grow: 1;
+            user-select: none;
+        }
+
+        /* 簡約客製化打勾鈕 */
+        .item-checkbox {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #cbd5e1;
+            border-radius: 5px;
+            margin-right: 10px;
+            display: grid;
+            place-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fff;
+        }
+        .item-checkbox::before {
+            content: "✓";
+            font-size: 13px;
+            font-weight: bold;
+            color: white;
+            transform: scale(0);
+            transition: transform 0.1s ease-in-out;
+        }
+        .item-checkbox:checked {
+            background-color: var(--accent-sky);
+            border-color: var(--accent-sky);
+        }
+        .item-checkbox:checked::before { transform: scale(1); }
+
+        /* 打勾後不消失，只改變視覺狀態 */
+        .item-text {
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            color: var(--text-dark);
+        }
+        .item-checkbox:checked + .item-text {
+            color: var(--text-muted);
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        
+        /* 狀態標籤（顯示已完成） */
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            background-color: #def7ec;
+            color: #03543f;
+            border-radius: 4px;
+            margin-left: 8px;
+            display: none;
+            font-weight: 500;
+        }
+        .item-checkbox:checked ~ .status-badge { display: inline-block; }
+
+        /* 刪除按鈕 */
+        .btn-delete {
+            background: transparent;
+            border: none;
+            color: #cca7a7;
+            cursor: pointer;
+            font-size: 0.85rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .btn-delete:hover {
+            color: #ef4444;
+            background-color: rgba(239, 68, 68, 0.05);
+        }
+
+        /* 新增項目輸入區 */
+        .add-item-box {
+            display: flex;
+            margin-top: 15px;
+            gap: 6px;
+        }
+        .input-item-name {
+            flex-grow: 1;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+        .input-item-name:focus {
+            outline: none;
+            border-color: var(--accent-sky);
+        }
+        .btn-add {
+            background: var(--accent-sakura);
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn-add:hover { background: #ff9eaf; }
+
+        /* 功能控制列：確保在最下方置中並留出優雅間距 */
+        .controls {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .btn-reset {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0,0,0,0.05);
+            padding: 10px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: #6b7280;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            backdrop-filter: blur(5px);
+        }
+        .btn-reset:hover {
+            background: #fff;
+            color: #374151;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="title-area">
+            <h1>行李打包清單</h1>
+            <span>PACKING LIST ｜ 旅行の準備</span>
+        </div>
+        <div class="countdown-box">
+            <div class="date-input-wrapper">
+                出發日：<input type="date" id="departureDate" onchange="saveDate()">
+            </div>
+            <div class="countdown-text" id="countdownDisplay">計算中...</div>
+        </div>
+    </header>
+
+    <div class="progress-container">
+        <div class="progress-text" id="progressText">0%已完成 (0/0)</div>
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- 💡 6格大分類卡片會在這裡由 JavaScript 渲染出來 -->
+    <div class="category-grid" id="categoryGrid"></div>
+
+    <!-- 💡 中間底部的重置按鈕 -->
+    <div class="controls">
+        <button class="btn-reset" onclick="resetAllCheckboxes()">🔄 重置所有打勾狀態</button>
+    </div>
+
+    <!-- 💡 方案 B 的全新設定描述與防呆匯入區 -->
+    <div class="config-section" style="text-align: center; margin-top: 35px; margin-bottom: 50px;">
+        <label for="configStringInput" style="font-weight: bold; color: #4b5563; display: block; margin-bottom: 8px; font-size: 0.95rem;">設定描述 :</label>
+	<input type="text" id="configStringInput" style="width: 85%; max-width: 500px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; text-align: center; background-color: #fff;" onclick="this.focus(); this.select();" placeholder="點擊可全選複製，或在此貼上新設定...">
+        
+        <div style="margin-top: 15px;">
+            <button class="btn-reset" style="background: var(--accent-sakura); color: white; border: none; padding: 10px 24px;" onclick="applyConfig()">更改設定</button>
+        </div>
+        
+        <p style="font-size: 0.85rem; color: #6b7280; margin-top: 12px; letter-spacing: 0.5px; padding: 0 20px; line-height: 1.4;">
+            💡 完整複製上方代碼即可至不同裝置或瀏覽器貼上設定並套用（點擊方塊可一鍵全選） - V2.1
+        </p>
+    </div>
+
+</div> <!-- container 結束 -->
+
+<script>
+    // 預設行李初始化清單資料（完美凑滿 6 格）
+    const defaultData = {
+        documents: { title: "🪪 重要證件", items: ["護照與機票", "外幣現金", "信用卡"] },
+        electronics: { title: "🔌 電子產品", items: ["手機與充電線", "行動電源", "萬國轉接頭"] },
+        clothing: { title: "👕 衣物鞋包", items: ["換洗衣物", "禦寒外套", "舒適慢跑鞋"] },
+        toiletries: { title: "🧴 藥品盥洗", items: ["常備感冒藥", "防曬乳/保養品", "旅行盥洗組"] },
+        custom1: { title: "✨ 其他物品清單1", items: ["太陽眼鏡", "雨傘/雨具"] }, 
+        custom2: { title: "🎈 其他物品清單2", items: ["隨身小包", "休閒零食"] }  
+    };
+
+    let listData = {};
+    let checkedItems = {};
+
+    // 初始化讀取資料
+    function init() {
+        // 1. 讀取清單架構（使用 _v3 鍵值確保強制載入全新 6 格卡片）
+        const savedData = localStorage.getItem('anime_packing_list_data_v3');
+        if (savedData) {
+            listData = JSON.parse(savedData);
+        } else {
+            listData = JSON.parse(JSON.stringify(defaultData));
+            saveListData();
+        }
+
+        // 2. 讀取打勾狀態
+        const savedChecked = localStorage.getItem('anime_packing_checked');
+        if (savedChecked) {
+            checkedItems = JSON.parse(savedChecked);
+        }
+
+        // 3. 讀取日期
+        const savedDate = localStorage.getItem('anime_departure_date');
+        const dateInput = document.getElementById('departureDate');
+        if (savedDate) {
+            dateInput.value = savedDate;
+        } else {
+            const defaultDate = new Date();
+            defaultDate.setDate(defaultDate.getDate() + 7);
+            dateInput.value = defaultDate.toISOString().split('T')[0];
+            saveDate();
+        }
+
+        renderList();
+        startCountdown();
+        updateConfigString();
+        setInterval(startCountdown, 60000); 
+    }
+
+    // 儲存資料架構
+    function saveListData() {
+        localStorage.setItem('anime_packing_list_data_v3', JSON.stringify(listData));
+    }
+
+    // 儲存勾選狀態
+    function saveCheckedData() {
+        localStorage.setItem('anime_packing_checked', JSON.stringify(checkedItems));
+        updateProgressBar();
+    }
+
+    // 儲存日期
+    function saveDate() {
+        const dateVal = document.getElementById('departureDate').value;
+        localStorage.setItem('anime_departure_date', dateVal);
+        startCountdown();
+    }
+
+    // 倒數計時邏輯
+    function startCountdown() {
+        const dateVal = document.getElementById('departureDate').value;
+        const display = document.getElementById('countdownDisplay');
+        
+        if (!dateVal) {
+            display.textContent = "未設定日期";
+            return;
+        }
+
+        const targetDate = new Date(dateVal + "T00:00:00");
+        const now = new Date();
+        
+        const targetDay = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+        const currentDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        
+        const diffTime = targetDay - currentDay;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays <= 0) {
+            display.textContent = "已到出發日 !!";
+        } else {
+            display.textContent = `還有 ⏳ ${diffDays} 天出發`;
+        }
+    }
+
+    // 渲染清單網頁畫面
+    function renderList() {
+        const grid = document.getElementById('categoryGrid');
+        if (!grid) return; 
+        grid.innerHTML = '';
+
+        Object.keys(listData).forEach(catKey => {
+            const cat = listData[catKey];
+            
+            const card = document.createElement('div');
+            card.className = 'category-card';
+            
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'category-title';
+            
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.className = 'category-title-input';
+            titleInput.value = cat.title;
+            titleInput.onchange = function() {
+                listData[catKey].title = this.value;
+                saveListData();
+            };
+            
+            titleDiv.appendChild(titleInput);
+            card.appendChild(titleDiv);
+
+            const ul = document.createElement('ul');
+            ul.className = 'item-list';
+
+            cat.items.forEach((itemText, index) => {
+                const itemKey = `${catKey}_${index}_${itemText}`;
+                const isChecked = !!checkedItems[itemKey];
+
+                const li = document.createElement('li');
+                li.className = 'item-row';
+
+                const label = document.createElement('label');
+                label.className = 'item-label';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'item-checkbox';
+                checkbox.checked = isChecked;
+                checkbox.onchange = function() {
+                    checkedItems[itemKey] = this.checked;
+                    saveCheckedData();
+                };
+
+                const textSpan = document.createElement('span');
+                textSpan.className = 'item-text';
+                textSpan.textContent = itemText;
+
+                const badge = document.createElement('span');
+                badge.className = 'status-badge';
+                badge.textContent = '已完成';
+
+                label.appendChild(checkbox);
+                label.appendChild(textSpan);
+                label.appendChild(badge);
+
+                const delBtn = document.createElement('button');
+                delBtn.className = 'btn-delete';
+                delBtn.textContent = '❌';
+                delBtn.onclick = function() {
+                    deleteItem(catKey, index, itemKey);
+                };
+
+                li.appendChild(label);
+                li.appendChild(delBtn);
+                ul.appendChild(li);
+            });
+
+            card.appendChild(ul);
+
+            const addBox = document.createElement('div');
+            addBox.className = 'add-item-box';
+            addBox.innerHTML = `
+                <input type="text" class="input-item-name" id="input_${catKey}" placeholder="新增物品..." onkeypress="handleKeyPress(event, '${catKey}')">
+                <button class="btn-add" onclick="addItem('${catKey}')">➕</button>
+            `;
+            card.appendChild(addBox);
+
+            grid.appendChild(card);
+        });
+
+        updateProgressBar();
+    }
+
+    // 新增項目
+    function addItem(catKey) {
+        const input = document.getElementById(`input_${catKey}`);
+        const text = input.value.trim();
+        if (!text) return;
+
+        listData[catKey].items.push(text);
+        saveListData();
+        renderList();
+        input.focus();
+    }
+
+    function handleKeyPress(event, catKey) {
+        if (event.key === 'Enter') {
+            addItem(catKey);
+        }
+    }
+
+    // 刪除項目
+    function deleteItem(catKey, index, itemKey) {
+        listData[catKey].items.splice(index, 1);
+        delete checkedItems[itemKey]; 
+        saveListData();
+        saveCheckedData();
+        renderList();
+    }
+
+    // 更新進度條
+    function updateProgressBar() {
+        const allCheckboxes = document.querySelectorAll('.item-checkbox');
+        const total = allCheckboxes.length;
+        let checkedCount = 0;
+
+        allCheckboxes.forEach(cb => {
+            if (cb.checked) checkedCount++;
+        });
+
+        const percent = total === 0 ? 0 : Math.round((checkedCount / total) * 100);
+        
+        const bar = document.getElementById('progressBar');
+        const text = document.getElementById('progressText');
+        if (bar) bar.style.width = `${percent}%`;
+        if (text) text.textContent = `${percent}% 已完成 (${checkedCount}/${total})`;
+    }
+
+    
+    // 打包配置字串更新
+    function updateConfigString() {
+        const configData = {
+            list: listData,
+            checked: checkedItems,
+            date: localStorage.getItem('anime_departure_date') || ""
+        };
+        try {
+            const jsonString = JSON.stringify(configData);
+            const encodedString = btoa(encodeURIComponent(jsonString));
+            const configInput = document.getElementById('configStringInput');
+            if (configInput) configInput.value = encodedString;
+        } catch (e) { console.error(e); }
+    }
+
+    // 💡 跨平台相容：自製通用彈窗觸發器（徹底繞過 iOS 封鎖）
+    function showCustomConfirm(titleText, onConfirm) {
+        const overlay = document.getElementById('iosModalOverlay');
+        const title = document.getElementById('iosModalTitle');
+        const cancelBtn = document.getElementById('iosModalCancelBtn');
+        const confirmBtn = document.getElementById('iosModalConfirmBtn');
+
+        title.textContent = titleText;
+        overlay.classList.add('show');
+
+        // 清除舊的點擊事件
+        cancelBtn.onclick = null;
+        confirmBtn.onclick = null;
+
+        // 綁定新事件
+        cancelBtn.onclick = function() {
+            overlay.classList.remove('show');
+        };
+        confirmBtn.onclick = function() {
+            overlay.classList.remove('show');
+            onConfirm(); // 執行傳入的實際打包動作
+        };
+    }
+
+    // 💡 全新修改版：重置所有勾選（iOS/Windows 100% 通用）
+    function resetAllCheckboxes() {
+        showCustomConfirm('確定要將所有項目的打勾進度清除，重新開始打包嗎？', function() {
+            checkedItems = {};
+            saveCheckedData();
+            renderList();
+        });
+    }
+
+    // 💡 全新修改版：匯入並更改設定（iOS/Windows 100% 通用）
+    function applyConfig() {
+        const configInput = document.getElementById('configStringInput');
+        const encodedData = configInput.value.trim();
+
+        if (!encodedData) {
+            // 這裡也防呆，改用自製輕量小通知
+            showCustomConfirm('請先在方塊中貼上要匯入的設定字串！', function(){});
+            document.getElementById('iosModalCancelBtn').style.display = 'none'; // 隱藏取消鈕變成單純確定
+            return;
+        }
+        
+        // 恢復取消按鈕的正常顯示
+        document.getElementById('iosModalCancelBtn').style.display = 'inline-block';
+
+        showCustomConfirm('請問是否修改設定？（這將會覆蓋您目前畫面上所有的打包進度與日期喔！）', function() {
+            try {
+                const decodedJson = decodeURIComponent(atob(encodedData));
+                const parsedData = JSON.parse(decodedJson);
+
+                if (parsedData.list && parsedData.checked) {
+                    listData = parsedData.list;
+                    checkedItems = parsedData.checked;
+
+                    saveListData();
+                    localStorage.setItem('anime_packing_checked', JSON.stringify(checkedItems));
+                    
+                    if (parsedData.date) {
+                        localStorage.setItem('anime_departure_date', parsedData.date);
+                        document.getElementById('departureDate').value = parsedData.date;
+                    }
+
+                    renderList();
+                    startCountdown();
+                    updateConfigString();
+                    
+                    // 用確定視窗通知使用者成功
+                    setTimeout(() => {
+                        showCustomConfirm('✨ 設定更改成功！畫面已同步更新。', function(){});
+                        document.getElementById('iosModalCancelBtn').style.display = 'none';
+                    }, 300);
+                } else {
+                    setTimeout(() => {
+                        showCustomConfirm('❌ 匯入失敗：字串格式不正確。', function(){});
+                        document.getElementById('iosModalCancelBtn').style.display = 'none';
+                    }, 300);
+                }
+            } catch (e) {
+                setTimeout(() => {
+                    showCustomConfirm('❌ 匯入失敗：解析字串失敗，請檢查是否複製完整。', function(){});
+                    document.getElementById('iosModalCancelBtn').style.display = 'none';
+                }, 300);
+            }
+        });
+    }
+
+
+    
+
+
+    // AOP 連動攔截
+    const originalSaveListData = saveListData;
+    saveListData = function() {
+        originalSaveListData();
+        updateConfigString();
+    };
+
+    const originalSaveCheckedData = saveCheckedData;
+    saveCheckedData = function() {
+        originalSaveCheckedData();
+        updateConfigString();
+    };
+
+    const originalSaveDate = saveDate;
+    saveDate = function() {
+        originalSaveDate();
+        updateConfigString();
+    };
+
+    window.onload = init;
+</script>
+
+<!-- 🌸 專為 iOS 系統設計的跨平台自製彈窗（CSS 與 HTML） -->
+<style>
+    .ios-modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px);
+        display: flex; justify-content: center; align-items: center;
+        z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .ios-modal-overlay.show { opacity: 1; pointer-events: auto; }
+    .ios-modal-box {
+        background: #ffffff; padding: 25px; border-radius: 16px;
+        width: 85%; max-width: 320px; text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.8);
+        transform: scale(0.9); transition: transform 0.2s;
+    }
+    .ios-modal-overlay.show .ios-modal-box { transform: scale(1); }
+    .ios-modal-title { font-weight: bold; font-size: 1.1rem; color: #374151; margin-bottom: 12px; }
+    .ios-modal-btn-group { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+    .ios-btn {
+        padding: 8px 20px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; border: none; font-weight: bold; transition: all 0.2s;
+    }
+    .ios-btn-cancel { background: #f3f4f6; color: #6b7280; }
+    .ios-btn-confirm { background: var(--accent-sakura); color: white; }
+</style>
+
+<div id="iosModalOverlay" class="ios-modal-overlay">
+    <div class="ios-modal-box">
+        <div class="ios-modal-title" id="iosModalTitle">提示訊息</div>
+        <div class="ios-modal-btn-group">
+            <button class="ios-btn ios-btn-cancel" id="iosModalCancelBtn">取消</button>
+            <button class="ios-btn ios-btn-confirm" id="iosModalConfirmBtn">確定</button>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+
