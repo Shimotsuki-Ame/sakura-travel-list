@@ -43,20 +43,46 @@
             z-index: -1;
         }
 
+        /* 🌸 5朵錯落有致的動態櫻花背景裝飾 */
+        /* 第一朵（原本的左上角） */
         body::after {
-            content: "🌸";
-            position: fixed;
-            top: 10%;
-            left: 5%;
-            font-size: 2rem;
-            opacity: 0.2;
-            animation: float 6s ease-in-out infinite;
-            z-index: -1;
+            content: "🌸"; position: fixed;
+            top: 12%; left: 6%; font-size: 1.8rem; opacity: 0.25;
+            animation: floatSakura1 6s ease-in-out infinite; z-index: -1;
+        }
+        /* 新增：第二朵（右上角，稍微小一點，飄得慢） */
+        .sakura-2 {
+            content: "🌸"; position: fixed;
+            top: 15%; right: 8%; font-size: 1.3rem; opacity: 0.2;
+            animation: floatSakura2 8s ease-in-out infinite; z-index: -1;
+        }
+        /* 新增：第三朵（左下角，中等大小） */
+        .sakura-3 {
+            content: "🌸"; position: fixed;
+            bottom: 25%; left: 10%; font-size: 1.5rem; opacity: 0.18;
+            animation: floatSakura1 7s ease-in-out infinite; z-index: -1;
+        }
+        /* 新增：第四朵（右下角富士山上方，迷你可愛） */
+        .sakura-4 {
+            content: "🌸"; position: fixed;
+            bottom: 35%; right: 25%; font-size: 1.1rem; opacity: 0.22;
+            animation: floatSakura2 5s ease-in-out infinite; z-index: -1;
+        }
+        /* 新增：第五朵（中間偏左，大朵有存在感） */
+        .sakura-5 {
+            content: "🌸"; position: fixed;
+            top: 50%; left: 4%; font-size: 2.2rem; opacity: 0.12;
+            animation: floatSakura1 9s ease-in-out infinite; z-index: -1;
         }
 
-        @keyframes float {
+        /* 讓5朵櫻花有不同角度與上下漂浮律動的動漫風動畫 */
+        @keyframes floatSakura1 {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(15deg); }
+            50% { transform: translateY(-12px) rotate(15deg); }
+        }
+        @keyframes floatSakura2 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-18px) rotate(-20deg); }
         }
 
         .container {
@@ -142,7 +168,7 @@
         }
         .progress-text {
             position: absolute;
-            right: 15px;
+            left: 5px;       /* 💡 從 right 改為 left，移到左邊 */
             top: -25px;
             font-size: 0.85rem;
             font-weight: bold;
@@ -351,6 +377,11 @@
 </head>
 <body>
 
+<div class="sakura-2">🌸</div>
+<div class="sakura-3">🌸</div>
+<div class="sakura-4">🌸</div>
+<div class="sakura-5">🌸</div>
+
 <div class="container">
     <header>
         <div class="title-area">
@@ -388,7 +419,7 @@
         </div>
         
         <p style="font-size: 0.85rem; color: #6b7280; margin-top: 12px; letter-spacing: 0.5px; padding: 0 20px; line-height: 1.4;">
-            💡 完整複製上方代碼即可至不同裝置或瀏覽器貼上設定並套用（點擊方塊可一鍵全選） - V2.1
+            💡 完整複製上方代碼即可至不同裝置或瀏覽器貼上設定並套用（點擊方塊可一鍵全選） - V2.2
         </p>
     </div>
 
