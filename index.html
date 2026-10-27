@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌸 行李打包清單 ｜ 旅行の準備</title>
+    <title>🍁 行李打包清單 ｜ 旅行の準備</title>
     <style>
         :root {
-            --anime-blue: #e0f2fe;
-            --anime-pink: #fce7f3;
-            --accent-sakura: #ffb7c5;
-            --accent-sky: #38bdf8;
-            --text-dark: #374151;
-            --text-muted: #9ca3af;
-            --card-bg: rgba(255, 255, 255, 0.88);
+            /* 🍁 核心調色盤：將原本鮮豔的深橘改為「古銅棕色」，文字與小字也同步沉穩化 */
+            --anime-blue: #f5e6d3;      /* 內斂的暖焙茶色 */
+            --anime-pink: #e9d5bf;      /* 暮秋枯葉色 */
+            --accent-sakura: #a67c52;   /* 💡 成功改為質樸的「古銅棕色」 */
+            --accent-sky: #b91c1c;      /* 暗沉的深朱紅 */
+            --text-dark: #3e2723;       /* 濃郁的黑巧克力深褐字 */
+            --text-muted: #7c2d12;      /* 沉穩的大地方向色 */
+            --card-bg: rgba(255, 254, 250, 0.92); /* 帶有宣紙質感的暖白 */
         }
 
         body {
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-            background: linear-gradient(135deg, var(--anime-blue) 0%, var(--anime-pink) 100%);
+            /* 💡 降低背景明度，改為極具深秋質感的暗沉溫潤漸層 */
+            background: linear-gradient(135deg, #ebd8c2 0%, #dfcbb5 50%, #e2c2be 100%);
             background-attachment: fixed;
             color: var(--text-dark);
             margin: 0;
@@ -29,7 +31,8 @@
             position: relative;
         }
 
-        /* 簡約日本動漫元素背景裝飾 (富士山與太陽意象剪影) */
+
+        /* 🍁 簡約日本秋季元素背景裝飾 (富士山與秋日夕陽剪影) */
         body::before {
             content: "";
             position: fixed;
@@ -37,45 +40,45 @@
             right: 10%;
             width: 300px;
             height: 150px;
-            background: radial-gradient(circle at 50% 150%, rgba(255, 183, 197, 0.4) 0%, transparent 70%),
+            background: radial-gradient(circle at 50% 150%, rgba(220, 38, 38, 0.15) 0%, transparent 70%),
                         linear-gradient(to top, rgba(255,255,255,0.3) 0%, transparent 100%);
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
             z-index: -1;
         }
 
-        /* 🌸 5朵錯落有致的動態櫻花背景裝飾 */
-        /* 第一朵（原本的左上角） */
+        /* 第一片楓葉 */
         body::after {
-            content: "🌸"; position: fixed;
-            top: 12%; left: 6%; font-size: 1.8rem; opacity: 0.25;
+            content: "🍁"; position: fixed;
+            top: 12%; left: 6%; font-size: 1.8rem; opacity: 0.35; /* 💡 調低透明度 */
             animation: floatSakura1 6s ease-in-out infinite; z-index: -1;
         }
-        /* 新增：第二朵（右上角，稍微小一點，飄得慢） */
+        /* 第二片楓葉 */
         .sakura-2 {
-            content: "🌸"; position: fixed;
-            top: 15%; right: 8%; font-size: 1.3rem; opacity: 0.2;
+            content: "🍁"; position: fixed;
+            top: 15%; right: 8%; font-size: 1.3rem; opacity: 0.32; /* 💡 調低透明度 */
             animation: floatSakura2 8s ease-in-out infinite; z-index: -1;
         }
-        /* 新增：第三朵（左下角，中等大小） */
+        /* 第三片楓葉 */
         .sakura-3 {
-            content: "🌸"; position: fixed;
-            bottom: 25%; left: 10%; font-size: 1.5rem; opacity: 0.18;
+            content: "🍁"; position: fixed;
+            bottom: 25%; left: 10%; font-size: 1.5rem; opacity: 0.3;  /* 💡 調低透明度 */
             animation: floatSakura1 7s ease-in-out infinite; z-index: -1;
         }
-        /* 新增：第四朵（右下角富士山上方，迷你可愛） */
+        /* 第四片楓葉 */
         .sakura-4 {
-            content: "🌸"; position: fixed;
-            bottom: 35%; right: 25%; font-size: 1.1rem; opacity: 0.22;
+            content: "🍁"; position: fixed;
+            bottom: 35%; right: 25%; font-size: 1.1rem; opacity: 0.34; /* 💡 調低透明度 */
             animation: floatSakura2 5s ease-in-out infinite; z-index: -1;
         }
-        /* 新增：第五朵（中間偏左，大朵有存在感） */
+        /* 第五片楓葉 */
         .sakura-5 {
-            content: "🌸"; position: fixed;
-            top: 50%; left: 4%; font-size: 2.2rem; opacity: 0.12;
+            content: "🍁"; position: fixed;
+            top: 50%; left: 4%; font-size: 2.2rem; opacity: 0.28; /* 💡 調低透明度 */
             animation: floatSakura1 9s ease-in-out infinite; z-index: -1;
         }
 
-        /* 讓5朵櫻花有不同角度與上下漂浮律動的動漫風動畫 */
+
+        /* 楓葉微風搖曳與飄落律動的動漫風動畫 */
         @keyframes floatSakura1 {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-12px) rotate(15deg); }
@@ -104,17 +107,17 @@
         .title-area h1 {
             margin: 0 0 5px 0;
             font-size: 2.2rem;
-            color: #4b5563;
+            color: #5c3e35;
             letter-spacing: 2px;
             font-weight: 600;
         }
         .title-area span {
             font-size: 0.9rem;
-            color: #8b5cf6;
+            color: #b45309;
             letter-spacing: 1px;
         }
 
-        /* 倒數計時區塊 - 調整為深灰出發日與櫻花粉倒數 */
+        /* 倒數計時區塊 */
         .countdown-box {
             background: var(--card-bg);
             padding: 14px 22px;
@@ -125,7 +128,7 @@
         }
         .date-input-wrapper {
             font-size: 1.1rem;
-            color: #4b5563;
+            color: var(--text-dark);
             margin-bottom: 6px;
             font-weight: bold;
         }
@@ -134,7 +137,7 @@
             background: transparent;
             font-family: inherit;
             font-size: 1.1rem;
-            color: #4b5563;
+            color: var(--text-dark);
             font-weight: bold;
             cursor: pointer;
             width: 130px;
@@ -145,13 +148,13 @@
         .countdown-text {
             font-size: 1.15rem;
             font-weight: bold;
-            color: #ff9eaf;
+            color: #ea580c; /* 溫暖的深橘色倒數 */
             letter-spacing: 0.5px;
         }
 
         /* 進度條設計 */
         .progress-container {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.4);
             border-radius: 20px;
             padding: 4px;
             margin-bottom: 35px;
@@ -168,11 +171,11 @@
         }
         .progress-text {
             position: absolute;
-            left: 5px;       /* 💡 從 right 改為 left，移到左邊 */
+            left: 5px;
             top: -25px;
             font-size: 0.85rem;
             font-weight: bold;
-            color: #6b7280;
+            color: #7c2d12;
         }
 
         /* 主清單卡片群組 */
@@ -187,7 +190,7 @@
             background: var(--card-bg);
             border-radius: 18px;
             padding: 22px;
-            box-shadow: 0 10px 25px rgba(142, 197, 252, 0.15);
+            box-shadow: 0 10px 25px rgba(217, 119, 6, 0.08);
             border: 1px solid rgba(255,255,255,0.7);
             display: flex;
             flex-direction: column;
@@ -199,7 +202,7 @@
             font-size: 1.15rem;
             font-weight: bold;
             margin-bottom: 15px;
-            color: #4b5563;
+            color: var(--text-dark);
             border-bottom: 2px dashed var(--accent-sakura);
             padding-bottom: 6px;
         }
@@ -210,7 +213,7 @@
             background: transparent;
             font-size: 1.15rem;
             font-weight: bold;
-            color: #4b5563;
+            color: var(--text-dark);
             width: 100%;
             font-family: inherit;
             border-radius: 4px;
@@ -255,7 +258,7 @@
             appearance: none;
             width: 18px;
             height: 18px;
-            border: 2px solid #cbd5e1;
+            border: 2px solid #d1d5db;
             border-radius: 5px;
             margin-right: 10px;
             display: grid;
@@ -285,7 +288,7 @@
             color: var(--text-dark);
         }
         .item-checkbox:checked + .item-text {
-            color: var(--text-muted);
+            color: #94a3b8;
             text-decoration: line-through;
             opacity: 0.6;
         }
@@ -294,8 +297,8 @@
         .status-badge {
             font-size: 0.75rem;
             padding: 2px 6px;
-            background-color: #def7ec;
-            color: #03543f;
+            background-color: #ffedd5;
+            color: #9a3412;
             border-radius: 4px;
             margin-left: 8px;
             display: none;
@@ -327,18 +330,18 @@
         }
         .input-item-name {
             flex-grow: 1;
-            border: 1px solid #e2e8f0;
-            background: #fff;
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-        }
-        .input-item-name:focus {
-            outline: none;
-            border-color: var(--accent-sky);
-        }
+	    border: 1px solid #e5e7eb;
+	    background: #fff;
+	    padding: 6px 10px;
+	    border-radius: 8px;
+	    font-size: 0.85rem;
+	    }
+	 .input-item-name:focus {
+	    outline: none;
+	    border-color: var(--accent-sky);
+	}
         .btn-add {
-            background: var(--accent-sakura);
+            background: #CF9E9E; /* +按鈕顏色 */
             color: white;
             border: none;
             padding: 4px 10px;
@@ -348,39 +351,42 @@
             font-weight: bold;
             transition: background 0.2s;
         }
-        .btn-add:hover { background: #ff9eaf; }
+        /* 💡 滑鼠移上去時，從鮮豔深橘色改為內斂的棕橘色 */
+        .btn-add:hover { background: #8c5e34; }
 
-        /* 功能控制列：確保在最下方置中並留出優雅間距 */
-        .controls {
-            text-align: center;
-            margin-top: 40px;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-        .btn-reset {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(0,0,0,0.05);
-            padding: 10px 24px;
-            border-radius: 20px;
-            cursor: pointer;
-            color: #6b7280;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            backdrop-filter: blur(5px);
-        }
-        .btn-reset:hover {
-            background: #fff;
-            color: #374151;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
+
+	/* 功能控制列 */
+	.controls {
+	   text-align: center;
+	    margin-top: 40px;
+	    margin-bottom: 20px;
+	    width: 100%;
+	}
+	.btn-reset {
+	    background: rgba(255, 255, 255, 0.7);
+	    border: 1px solid rgba(0,0,0,0.05);
+	    padding: 10px 24px;
+	    border-radius: 20px;
+	    cursor: pointer;
+	    color: #7c2d12;
+	    font-size: 0.9rem;
+	    transition: all 0.2s;
+	    backdrop-filter: blur(5px);
+	}
+	.btn-reset:hover {
+	    background: #fff;
+	    color: var(--text-dark);
+	    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+	}
+
     </style>
 </head>
 <body>
 
-<div class="sakura-2">🌸</div>
-<div class="sakura-3">🌸</div>
-<div class="sakura-4">🌸</div>
-<div class="sakura-5">🌸</div>
+<div class="sakura-2">🍁</div>
+<div class="sakura-3">🍁</div>
+<div class="sakura-4">🍁</div>
+<div class="sakura-5">🍁</div>
 
 <div class="container">
     <header>
